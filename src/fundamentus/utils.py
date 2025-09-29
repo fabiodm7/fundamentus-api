@@ -13,6 +13,10 @@ from tabulate import tabulate
 from datetime import datetime
 from dateutil.parser import parse
 
+# FutureWarning: Downcasting behavior in `replace` is deprecated and will be removed in a future version. 
+# To retain the old behavior, explicitly call `result.infer_objects(copy=False)`. 
+# To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+pd.set_option('future.no_silent_downcasting', True)
 
 #
 # Ref:
