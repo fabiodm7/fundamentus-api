@@ -86,7 +86,7 @@ def get_detalhes_papel(papel):
     ## raw
     logging.debug('1: get raw [{}]'.format(papel))
     tables = get_detalhes_raw(papel)
-    if len(tables) == 5:
+    if len(tables) <= 6: # ALTERAÇAO AQUI: quando o ticker pesquisado é um FII o retorno da função get_detalhes_raw traz uma linha a mais
         pass
     else: # pragma: no cover
         logging.debug('HTML tables not rendered as expected. Len={}. Skipped.'.format(len(tables)))
@@ -194,8 +194,13 @@ def get_detalhes_papel(papel):
             logging.debug('NaN. Skipped.')
 
     # Last fixes
-    hf['Data_ult_cot']           = utils.dt_iso8601(hf['Data_ult_cot'])
-    hf['Ult_balanco_processado'] = utils.dt_iso8601(hf['Ult_balanco_processado'])
+    hf['Data_ult_cot'] = utils.dt_iso8601(hf['Data_ult_cot'])
+    
+     # ALTERAÇAO AQUI: um bloco try...except é acrescentado aqui porque a página de FII do site não tem o campo Ult_balanco_processado
+    try:
+      hf['Ult_balanco_processado'] = utils.dt_iso8601(hf['Ult_balanco_processado'])
+    except:
+      hf['Ult_balanco_processado'] = None
 
     result = pd.DataFrame(hf, index=[papel])
 
